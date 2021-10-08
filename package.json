@@ -1,0 +1,27 @@
+{
+  "name": "backenddev-hw-day2",
+  "version": "1.0.0",
+  "description": "BackendDev Homeworks Day2",
+  "main": "index.js",
+  "scripts": {
+    "activity1": "nodemon activity1/index.js",
+    "activity2": "nodemon activity2/index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jamesee/BackendDev-hw-day2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jamesee/BackendDev-hw-day2/issues"
+  },
+  "homepage": "https://github.com/jamesee/BackendDev-hw-day2#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.13"
+  }
+}
