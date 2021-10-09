@@ -22,7 +22,7 @@ module.exports = (authMiddleware, validateDto, controllers) => {
 
 
   // Auth
-  router.use('/', require('./auth')(controllers, validateDto))
+  router.use('/api', require('./auth')(controllers, validateDto))
 
   // Swagger Docs
   // const options = {
@@ -40,7 +40,7 @@ module.exports = (authMiddleware, validateDto, controllers) => {
 
   // All routes from this point will use the auth middleware
   router.use(authMiddleware)
-  router.use('/user-details', require('./userDetails')(controllers, validateDto))
+  router.use('/api/user-details', require('./userDetails')(controllers, validateDto))
 
   // router.use('/items', require('./items')(db))
   // router.use('/todos', require('./todos')(controllers, validateDto))

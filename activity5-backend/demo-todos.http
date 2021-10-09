@@ -1,15 +1,15 @@
 
-@baseUrl = http://localhost:3000
+@baseUrl = http://localhost:5000
 
 ###
 # @name register
-POST http://localhost:3000/register HTTP/1.1
+POST {{baseUrl}}/register HTTP/1.1
 content-type: application/json
 
 {
-    "username": "test_user1",
-    "email": "test1@gmail.com",
-    "password": "test_password1"
+    "username": "james8",
+    "email": "james8@gmail.com",
+    "password": "12345678"
 }
 
 ###
@@ -18,8 +18,8 @@ POST {{baseUrl}}/login HTTP/1.1
 content-type: application/json
 
 {
-    "email": "test@gmail.com",
-    "password": "test_password"
+    "email": "james1@gmail.com",
+    "password": "12345678"
 }
 
 
