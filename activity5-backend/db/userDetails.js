@@ -20,14 +20,12 @@ module.exports = (pool, UserDetails) => {
       }
 
     db.findUserDetailsByUserId = async (user_id) => {
-        console.debug("db.findUserDetailsByUserId")
-        console.debug(user_id)
+
         const res = await pool.query(
           'SELECT * FROM User_details WHERE user_id = $1',
           [user_id]
         )
 
-        console.debug(res.rowCount)
         return res.rowCount ? new UserDetails(res.rows[0]) : null
       }
     return db

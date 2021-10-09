@@ -3,7 +3,6 @@ module.exports = (db, UserDetails, ApiError) => {
 
   controllers.insertUserDetails = async (req, res, next) => {
     const { uid, username } = req;
-    // console.debug(req.body)
     const { company, designation, department } = req.body
 
     const newUserDetails = new UserDetails({user_id:uid,company, designation, department});
