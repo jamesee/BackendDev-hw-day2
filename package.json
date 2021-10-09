@@ -6,6 +6,8 @@
   "scripts": {
     "activity1": "nodemon activity1/index.js",
     "activity2": "nodemon activity2/index.js",
+    "activity5": "nodemon activity5-backend/index.js",
+    "db:migrate": "node scripts/migrate.js",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,6 +24,17 @@
   "homepage": "https://github.com/jamesee/BackendDev-hw-day2#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "nodemon": "^2.0.13"
+    "nodemon": "^2.0.13",
+    "amqplib": "^0.8.0",
+    "bcrypt": "^5.0.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.6.3",
+    "pg": "^8.7.1",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6",
+    "yup": "^0.32.9"
   }
 }
