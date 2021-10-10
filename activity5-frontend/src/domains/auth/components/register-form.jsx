@@ -19,17 +19,16 @@ export const RegisterForm = () => {
           ev.preventDefault();
           setStatus("loading");
 
-          register({username, email, password })
-          .then(response =>{
-            // console.log(response)
-            setStatus("idle")
-            history.push('/')
-          })
-          .catch((error) => {
-            // console.log(error)
-            setStatus("error")
+          register({ username, email, password })
+            .then((response) => {
+              // console.log(response)
+              setStatus("idle");
+              history.push("/");
+            })
+            .catch((error) => {
+              // console.log(error)
+              setStatus("error");
             });
-
         }}
         className="p-6"
       >
@@ -39,10 +38,10 @@ export const RegisterForm = () => {
           </div>
         )}
         <div className="text-3xl mt-4 mb-8 font-extrabold text-center">
-          Register
+          Register User
         </div>
         <div className="space-y-6">
-        `<TextField
+          <TextField
             label="Username"
             value={username}
             onChangeValue={setUsername}
@@ -83,7 +82,12 @@ export const RegisterForm = () => {
         </div>
       </form>
       <div className="text-xl m-5  font-bold text-center">
-        <Link className="underline text-center text-md leading-relaxed text-pink-500" to={`/` }>Back to Homepage</Link>
+        <Link
+          className="underline text-center text-md leading-relaxed text-pink-500"
+          to={`/`}
+        >
+          Back to Homepage
+        </Link>
       </div>
     </div>
   );

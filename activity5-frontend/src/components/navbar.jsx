@@ -3,10 +3,8 @@ import { useContext } from 'react';
 import { LogoutButton } from "../domains/auth";
 
 import classes from './navbar.module.css';
-import { CollectionsContext } from '../domains/gallery';
 
 export const NavBar = () => {
-  const collectionsCtx = useContext(CollectionsContext);
   
   return (
     <header className={classes.header}>
