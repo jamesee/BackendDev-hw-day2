@@ -1,28 +1,44 @@
 import { Button } from "../../../components/button";
 import { TextField } from "../../../components/text-field";
 import * as React from "react";
-import { useLogin } from "../auth.state";
-import { Link } from 'react-router-dom';
+import { useLogin, useAuth} from "../auth.state";
+import { Link } from "react-router-dom";
+
+const ACCESS_TOKEN_STORAGE = "auth";
 
 export const LoginForm = () => {
+  const statusInit = { message: "", status: "idle" };
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [status, setStatus] = React.useState("idle");
+  const [status, setStatus] = React.useState(statusInit);
   const login = useLogin();
+  const auth = useAuth();
 
   return (
     <div className="max-w-md mx-auto m-6 shadow">
       <form
         onSubmit={(ev) => {
           ev.preventDefault();
-          setStatus("loading");
-          login({ email, password }).catch(() => setStatus("error"));
+          setStatus({ ...status, status: "loading" });
+          login({ email, password })
+            .then((res) => {
+              auth.login(res.token);
+              localStorage.setItem(ACCESS_TOKEN_STORAGE, res.token);
+              setStatus(statusInit);
+            })
+            .catch((res) => {
+              console.log(res.status, res.statusText);
+              res.json().then((data) => {
+                console.log(data);
+                setStatus({ message: data.errors, status: "errors" });
+              });
+            });
         }}
         className="p-6"
       >
-        {status === "error" && (
+        {status.status === "errors" && (
           <div className="p-2 text-red-800 bg-red-200 rounded-sm">
-            Fail to login.
+            {status.message}
           </div>
         )}
         <div className="text-3xl mt-4 mb-8 font-extrabold text-center">
@@ -37,7 +53,7 @@ export const LoginForm = () => {
             id="username"
             autoFocus
             required
-            disabled={status === "loading"}
+            disabled={status.status === "loading"}
           />
           <TextField
             label="Password"
@@ -47,20 +63,25 @@ export const LoginForm = () => {
             id="password"
             type="password"
             required
-            disabled={status === "loading"}
+            disabled={status.status === "loading"}
           />
           <Button
             type="submit"
             variant="primary"
             className="w-full"
-            disabled={status === "loading"}
+            disabled={status.status === "loading"}
           >
             Login
           </Button>
         </div>
       </form>
       <div className="text-xl m-5  font-bold text-center">
-        <Link className="underline text-center text-md leading-relaxed text-pink-500" to={`/register` }>Register</Link>
+        <Link
+          className="underline text-center text-md leading-relaxed text-pink-500"
+          to={`/register`}
+        >
+          Register
+        </Link>
       </div>
     </div>
   );

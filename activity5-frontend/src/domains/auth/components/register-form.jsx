@@ -1,14 +1,21 @@
 import { Button } from "../../../components/button";
 import { TextField } from "../../../components/text-field";
 import * as React from "react";
-import { useRegister } from "../auth.state";
+import { useRegister, useLogin } from "../auth.state";
 import { useHistory, Link } from "react-router-dom";
+import { useAuth } from "../auth.state";
+
+const ACCESS_TOKEN_STORAGE = "auth";
 
 export const RegisterForm = () => {
+  const statusInit = { message: "", status: "idle" };
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [status, setStatus] = React.useState("idle");
+  const [status, setStatus] = React.useState(statusInit);
+
+  const auth = useAuth();
+  const login = useLogin();
   const register = useRegister();
   const history = useHistory();
 
@@ -17,24 +24,30 @@ export const RegisterForm = () => {
       <form
         onSubmit={(ev) => {
           ev.preventDefault();
-          setStatus("loading");
+          setStatus({ ...status, status: "loading" });
 
           register({ username, email, password })
-            .then((response) => {
-              // console.log(response)
-              setStatus("idle");
+            .then((res) => {
+              login({ email, password }).then((res) => {
+                auth.login(res.token);
+                localStorage.setItem(ACCESS_TOKEN_STORAGE, res.token);
+                setStatus(statusInit);
+              });
               history.push("/");
             })
-            .catch((error) => {
-              // console.log(error)
-              setStatus("error");
+            .catch((res) => {
+              console.log(res.status, res.statusText);
+              res.json().then((data) => {
+                console.log(data);
+                setStatus({ message: data.errors, status: "errors" });
+              });
             });
         }}
         className="p-6"
       >
-        {status === "error" && (
+        {status.status === "errors" && (
           <div className="p-2 text-red-800 bg-red-200 rounded-sm">
-            Fail to register.
+            {status.message}
           </div>
         )}
         <div className="text-3xl mt-4 mb-8 font-extrabold text-center">
@@ -49,7 +62,7 @@ export const RegisterForm = () => {
             id="username"
             autoFocus
             required
-            disabled={status === "loading"}
+            disabled={status.status === "loading"}
           />
           <TextField
             label="Email"
@@ -59,7 +72,7 @@ export const RegisterForm = () => {
             id="email"
             autoFocus
             required
-            disabled={status === "loading"}
+            disabled={status.status === "loading"}
           />
           <TextField
             label="Password"
@@ -69,13 +82,13 @@ export const RegisterForm = () => {
             id="password"
             type="password"
             required
-            disabled={status === "loading"}
+            disabled={status.status === "loading"}
           />
           <Button
             type="submit"
             variant="primary"
             className="w-full"
-            disabled={status === "loading"}
+            disabled={status.status === "loading"}
           >
             Register
           </Button>

@@ -8,7 +8,7 @@ module.exports = (authService, ApiError) => {
     //   await amqpService.publishRegistration({ email, username });
       res.send({ token: token });
     } else {
-      next(ApiError.badRequest({ error: `Email ${email} already exists` }));
+      next(ApiError.badRequest({ errors: `Email ${email} already exists` }));
     }
   };
 
@@ -18,7 +18,7 @@ module.exports = (authService, ApiError) => {
     if (token) {
       res.send({ token: token });
     } else {
-      next(ApiError.badRequest({ error: `Invalid login credentials` }));
+      next(ApiError.badRequest({ errors: `Invalid login credentials` }));
     }
   };
 

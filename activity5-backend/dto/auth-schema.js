@@ -2,7 +2,7 @@ const yup = require("yup");
 
 const login = yup.object({
   body: yup.object({
-    email: yup.string().required("Email is required").email(),
+    email: yup.string().required("Email is required").email("Must be a valid email."),
     password: yup
       .string()
       .trim()
@@ -15,7 +15,7 @@ const login = yup.object({
 const register = yup.object({
   body: yup.object({
     username: yup.string().trim().required("Username is required"),
-    email: yup.string().required("Email is required").email(),
+    email: yup.string().required("Email is required").email("Must be a valid email."),
     password: yup
       .string()
       .trim()

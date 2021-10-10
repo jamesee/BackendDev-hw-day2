@@ -3,23 +3,30 @@ module.exports = (db, UserDetails, ApiError) => {
 
   controllers.insertUserDetails = async (req, res, next) => {
     const { uid, username } = req;
-    const { company, designation, department } = req.body
+    const { company, designation, department } = req.body;
 
-    const newUserDetails = new UserDetails({user_id:uid,company, designation, department});
-
+    const newUserDetails = new UserDetails({
+      user_id: uid,
+      company,
+      designation,
+      department,
+    });
 
     try {
-      let resUserDetails= {}
+      let resUserDetails = {};
       const userDetails = await db.findUserDetailsByUserId(uid);
 
       if (userDetails) {
-        resUserDetails = await db.updateUserDetails(userDetails.id, newUserDetails)
+        resUserDetails = await db.updateUserDetails(
+          userDetails.id,
+          newUserDetails
+        );
       } else {
         resUserDetails = await db.insertUserDetails(newUserDetails);
       }
       return res.status(201).json(resUserDetails);
     } catch (error) {
-      next(ApiError.internalServerError({ error: `Database error` }));
+      return next(ApiError.internalServerError({ errors: `Database errors` }));
     }
   };
 
@@ -29,13 +36,16 @@ module.exports = (db, UserDetails, ApiError) => {
 
     try {
       const userDetails = await db.findUserDetailsByUserId(uid);
-      if (userDetails){
+      // console.debug(userDetails);
+
+      if (userDetails) {
         return res.status(200).json(userDetails);
       } else {
-        next(ApiError.notFound(`User_id ${id} details not found.`))
+        // console.debug("not found")
+        return next(ApiError.notFound({errors:`User_id ${uid} details not found.`}));
       }
     } catch (error) {
-      next(ApiError.internalServerError({ error: `Database error` }));
+      return next(ApiError.internalServerError({ errors: `Database errors` }));
     }
   };
 

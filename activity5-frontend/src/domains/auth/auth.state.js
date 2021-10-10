@@ -1,9 +1,9 @@
-import  { createContext, useReducer, useContext } from "react";
+import { createContext, useReducer, useContext } from "react";
 
 const ACCESS_TOKEN_STORAGE = "auth";
 // const BASE_URL = "http://localhost:5000"
 // const BASE_URL = "https://ecomm-service.herokuapp.com"
-const BASE_URL="api"
+const BASE_URL = "api";
 
 const storedAccessToken = localStorage.getItem(ACCESS_TOKEN_STORAGE);
 
@@ -77,7 +77,7 @@ export const useAuth = () => {
 
 const login = (email, password) =>
   // fetch("https://ecomm-service.herokuapp.com/login", {
-    fetch(`${BASE_URL}/login`, {
+  fetch(`${BASE_URL}/login`, {
     method: "POST",
     headers: {
       accept: "application/json",
@@ -87,14 +87,17 @@ const login = (email, password) =>
       email,
       password,
     }),
-  }).then((res) => {
+  })
+  .then((res) => {
     if (res.ok) {
       return res.json();
     }
-    throw new Error(res.statusText);
-  });
+    return Promise.reject(res)
+    // throw new Error(res.statusText);
+  })
 
-  const register = (username, email, password) =>
+
+const register = (username, email, password) =>
   fetch(`${BASE_URL}/register`, {
     method: "POST",
     headers: {
@@ -102,32 +105,33 @@ const login = (email, password) =>
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      username, email, password
+      username,
+      email,
+      password,
     }),
-  }).then((res) => {
+  })
+  .then((res) => {
     if (res.ok) {
       return res.json();
     }
-    throw new Error(res.statusText);
-  });
+    return Promise.reject(res)
+    // throw new Error(res.statusText);
+  })
+
 
 export const useRegister = () => {
-    const auth = useContext(AuthContext);
-    
-    if (!auth) {
-      throw new Error("Your application must be wrapped with AuthProvider");
-    }
+  const auth = useContext(AuthContext);
 
-    const login = useLogin();
+  if (!auth) {
+    throw new Error("Your application must be wrapped with AuthProvider");
+  }
 
-    return function invokeRegister({ username, email, password }) {
-      return register(username, email, password).then((res) => {
-        login({email, password}).catch(err => console.log(err))
-        localStorage.setItem(ACCESS_TOKEN_STORAGE, res.token);
-      });
-    };
+  // const login = useLogin();
+
+  return function invokeRegister({ username, email, password }) {
+    return register(username, email, password)          
   };
-
+};
 
 export const useLogin = () => {
   const auth = useContext(AuthContext);
@@ -137,10 +141,7 @@ export const useLogin = () => {
   }
 
   return function invokeLogin({ email, password }) {
-    return login(email, password).then((res) => {
-      auth.login(res.token);
-      localStorage.setItem(ACCESS_TOKEN_STORAGE, res.token);
-    });
+    return login(email, password)
   };
 };
 
@@ -154,6 +155,6 @@ export const useLogout = () => {
   return () => {
     auth.logout();
     localStorage.removeItem(ACCESS_TOKEN_STORAGE);
-    localStorage.removeItem('page');
+    localStorage.removeItem("page");
   };
 };

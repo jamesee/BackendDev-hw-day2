@@ -9,7 +9,7 @@ function apiErrorHandler(err, req, res, next) {
     return res.status(err.code).json(err.message);
   }
 
-  return res.status(500).json({error: 'Something went wrong. Input may not in JSON format ...'});
+  return res.status(500).json({errors: 'Something went wrong. Input may not in JSON format ...'});
 }
 
 module.exports = apiErrorHandler;

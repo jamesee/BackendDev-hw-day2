@@ -21,9 +21,14 @@ const updateProfile = (token, { company, department, designation }) =>
       department,
       designation,
     }),
-  }).then((response) => {
-    return response.json();
-  });
+  })
+  .then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(res)
+    // throw new Error(res.statusText);
+  })
 
 const getProfile = (token, signal) =>
   fetch(`${BASE_URL}/user-details`, {
@@ -34,18 +39,22 @@ const getProfile = (token, signal) =>
       Authorization: `Bearer ${token}`,
     },
     signal,
-  }).then((response) => {
-    return response.json();
-  });
+  })
+  .then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(res)
+    // throw new Error(res.statusText);
+  })
 
 export const UserProfileForm = () => {
+  const statusInit = { message: "", status: "idle" };
   const [company, setCompany] = React.useState("");
   const [department, setDepartment] = React.useState("");
   const [designation, setDesignation] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
-  const [mystatus, setMystatus] = React.useState(() => {
-    return { message: "", status: "idle" };
-  });
+  const [mystatus, setMystatus] = React.useState(statusInit);
   const history = useHistory();
   const auth = useAuth();
   const ab = new AbortController();
@@ -53,26 +62,28 @@ export const UserProfileForm = () => {
   const loadProfile = (token, signal) => {
     setIsLoading(true);
     getProfile(token, signal).then((data) => {
-      if (data.error) {
-        setMystatus({ ...mystatus, message: data.error, status: "error" });
-      } else if (data) {
-        // console.debug(data);
         const { company, department, designation } = data;
         setCompany(company);
         setDepartment(department);
         setDesignation(designation);
-      }
       setIsLoading(false);
+    })
+    .catch((res) => {
+      console.log(res.status, res.statusText);
+      res.json().then((data) => {
+        console.log(data);
+        setMystatus({ message: data.errors, status: "errors" });
+      });
     });
-  };
 
+  }
+  
   React.useEffect(() => {
     if (auth.status !== "authenticated") {
       return;
     }
     const token = localStorage.getItem("auth");
     loadProfile(token, ab.signal);
-
     return () => {
       ab.abort();
     };
@@ -88,24 +99,33 @@ export const UserProfileForm = () => {
             const token = localStorage.getItem("auth");
             updateProfile(token, { company, department, designation })
             .then((data) => {
-                console.log(data);
                 const { company, department, designation } = data;
                 setCompany(company);
                 setDepartment(department);
                 setDesignation(designation);
                 setMystatus({ ...mystatus, status: "idle" });
                 history.push("/");
-              }
-            );
+              })
+            .catch((res) => {
+                console.log(res.status, res.statusText);
+                res.json().then((data) => {
+                  console.log(data);
+                  setMystatus({ message: data.errors, status: "errors" });
+                });
+              })
+            }
           }
-        }}
+        }
+
         className="p-6"
       >
-        {mystatus.status === "error" && (
+        {
+          mystatus.status === "errors" && (
           <div className="p-2 text-red-800 bg-red-200 rounded-sm">
             {mystatus.message}
           </div>
-        )}
+          )
+        }
         <div className="space-y-6">
           <TextField
             label="Company"
@@ -147,5 +167,5 @@ export const UserProfileForm = () => {
         </div>
       </form>
     </div>
-  );
-};
+  )
+}

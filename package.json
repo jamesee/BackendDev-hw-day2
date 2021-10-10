@@ -8,7 +8,7 @@
     "activity2": "nodemon activity2/index.js",
     "activity5": "nodemon activity5-backend/index.js",
     "db:migrate": "node scripts/migrate.js",
-    "dev": "nodemon index.js",
+    "prod": "cd activity5-frontend && npm run build && cd .. && node activity5-backend/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
