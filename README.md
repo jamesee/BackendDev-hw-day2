@@ -1,8 +1,6 @@
 # BackendDev Homeworks for Day2
 submitted by: James Ee
 
-
-
 # Activity 1
 
 ![Acitivity 1](images/activity1.png)
@@ -52,7 +50,7 @@ SELECT users FROM regist WHERE email IS NULL AND registered_car IS NOT NULL AND 
 
 ![Acitivity 4](images/activity4.png)
 
-I do not understand the questions of Activity4
+I do not comprehend what is expected of Activity4 questions.
 
 # Activity 5
 
