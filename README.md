@@ -52,6 +52,7 @@ SELECT users FROM regist WHERE email IS NULL AND registered_car IS NOT NULL AND 
 
 I do not comprehend what is expected of Activity4 questions.
 
+
 # Activity 5
 
 
@@ -82,3 +83,17 @@ $ npm run activity5
 ```
 
 Go to http://localhost:5000
+
+
+## Deploy Locally with Docker-Compose and ngnix as reverse-proxy
+
+```bash
+$ git clone https://github.com/jamesee/BackendDev-hw-day2.git
+
+$ cd BackendDev-hw-day2
+
+$ docker-compose up --build
+
+```
+
+go to http://localhost:80

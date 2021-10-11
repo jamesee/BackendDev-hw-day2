@@ -4,12 +4,9 @@
   "description": "BackendDev Homeworks Day2",
   "main": "index.js",
   "scripts": {
-    "activity1": "nodemon activity1/index.js",
-    "activity2": "nodemon activity2/index.js",
-    "activity5": "nodemon activity5-backend/index.js",
-    "db:migrate": "node activity5-backend/scripts/migrate.js",
-    "prod": "cd activity5-frontend && npm run build && cd .. && node activity5-backend/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "db:migrate": "node scripts/migrate.js",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",

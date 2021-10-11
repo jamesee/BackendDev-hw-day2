@@ -1,5 +1,5 @@
 require('dotenv').config()
-const db = require('../activity5-backend/db')
+const db = require('../db')
 
 db.initialise().then(() => {
   console.log('Database migration completed')
